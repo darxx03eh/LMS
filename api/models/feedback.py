@@ -5,7 +5,7 @@ from .time_stamped_mix_in import TimeStampedMixin
 from .user import User
 
 
-class Feedback(TimeStampedMixin, models.Model):
+class Feedback(models.Model):
     id = models.AutoField(primary_key=True)
     student = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="given_feedbacks"
@@ -15,7 +15,7 @@ class Feedback(TimeStampedMixin, models.Model):
     )
     comment = models.TextField()
     rate = models.IntegerField(choices=[(i, str(i)) for i in range(1, 6)])
-
+    created_at = models.DateTimeField(auto_now_add=True)
     class Meta:
         unique_together = ("student", "course")
 
