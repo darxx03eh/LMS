@@ -1,5 +1,7 @@
 from django.test.testcases import Client
 from django.urls import reverse
+from django.conf import settings
+import os
 class Helpers:
     @staticmethod
     def login(username, password):
@@ -45,3 +47,20 @@ class Helpers:
             ]
         }, HTTP_AUTHORIZATION=f'{token}', format='json', content_type='application/json')
         return course
+
+    @staticmethod
+    def create_lesson(token):
+        client = Client()
+        url = 'http://127.0.0.1:8000/api/v1/lessons'
+        course = Helpers.create_course(token)
+        course_id = course.json()['data']['id']
+        lesson = client.post(url, data={
+            'title': 'this is a lessons title',
+            'description': 'this is a lessons description',
+            'order': 1,
+            'course_id': course_id,
+            'video': open(os.path.join(
+                settings.MEDIA_ROOT, 'lessons/videos/Macbook-Air-araboon.vercel.app-mjo4zkarphl5ai.webm')),
+            'document': open(os.path.join(settings.MEDIA_ROOT, 'lessons/docs/ARABOON.postman_collection.json'))
+        }, format='multipart', HTTP_AUTHORIZATION=token)
+        return (lesson, course_id)

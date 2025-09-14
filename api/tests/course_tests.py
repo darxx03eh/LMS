@@ -1,7 +1,5 @@
-from Scripts.bottle import response
 from rest_framework import status
 from rest_framework.test import APITestCase
-from django.urls import reverse
 
 from api.tests.helpers.helpers import Helpers
 
