@@ -80,7 +80,7 @@ LESSON = [
         LessonViewSet.as_view({"get": "course_lessons"}),
     ),
     path(
-        f"{rule}/lessons/mark_completed/<int:pk>",
+        f"{rule}/lessons/<int:pk>/mark_completed",
         LessonViewSet.as_view({"post": "mark_completed"}),
     ),
 ]
