@@ -67,10 +67,10 @@ class CourseSerializer(ModelSerializer):
 class CourseUpdateCreateSerializer(ModelSerializer):
     lessons = LessonSerializer(many=True, required=False)
     instructor = InstructorSerializer(read_only=True)
-
+    id = serializers.IntegerField(read_only=True)
     class Meta:
         model = Course
-        fields = ("title", "description", "category", "level", "lessons", "instructor")
+        fields = ("id", "title", "description", "category", "level", "lessons", "instructor")
 
     def create(self, validated_data):
         lessons = validated_data.pop("lessons")
