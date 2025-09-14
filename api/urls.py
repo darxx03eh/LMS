@@ -44,10 +44,13 @@ COURSE = [
         ),
     ),
     path(
-        f"{rule}/courses/progress/<int:pk>", CourseViewSet.as_view({"get": "progress"})
+        f"{rule}/courses/<int:pk>/progress", CourseViewSet.as_view({"get": "progress"})
     ),
     path(
         f"{rule}/courses/<int:pk>/feedbacks", CourseViewSet.as_view({"get": "feedback"})
+    ),
+    path(
+        f'{rule}/courses/<int:pk>/enroll', CourseViewSet.as_view({"post": "enroll"})
     ),
 ]
 

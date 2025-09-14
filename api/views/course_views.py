@@ -6,7 +6,7 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from api.models import Course
+from api.models import Course, Enrollment
 from api.serializers.course_serializers import (
     CourseSerializer,
     CourseUpdateCreateSerializer,
@@ -29,7 +29,7 @@ class CourseViewSet(ModelViewSet):
     search_fields = ["title", "description"]
 
     def get_serializer_class(self):
-        if self.action == "progress":
+        if self.action in ['enroll', 'progress']:
             return None
         if self.request.method in ["POST", "PUT"]:
             return CourseUpdateCreateSerializer
@@ -37,6 +37,8 @@ class CourseViewSet(ModelViewSet):
 
     def get_permissions(self):
         user = getattr(self.request, "user", None)
+        if self.action == "enroll":
+            return [permissions.IsAuthenticated()]
         if self.request.method in ["POST", "PUT", "PATCH", "DELETE"]:
             if user and hasattr(user, "role") and user.role.lower() == "admin":
                 return [IsAdminUser()]
@@ -48,6 +50,8 @@ class CourseViewSet(ModelViewSet):
 
     def get_queryset(self):
         user = getattr(self.request, "user", None)
+        if self.action == "enroll":
+            return Course.objects.all()
         if self.request.method in ["POST", "PUT", "PATCH", "DELETE"]:
             if user and hasattr(user, "role") and user.role.lower() == "admin":
                 return super().get_queryset()
@@ -98,3 +102,22 @@ class CourseViewSet(ModelViewSet):
                 "message": "Feedback retrieved successfully",
             }
         )
+
+    @action(detail=True, methods=['post'], url_path="enroll")
+    def enroll(self, request, pk=None):
+        course = self.get_object()
+        user = self.request.user
+
+        if user.role.lower() != 'student':
+            raise PermissionDenied("Only students can enroll in courses.")
+
+        if Enrollment.objects.filter(course=course, student=user).exists():
+            return Response({
+                "message": "You are already enrolled in this course."
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        enrollment = Enrollment.objects.create(course=course, student=user)
+        return Response({
+            "message": "Enrolled successfully",
+        }, status=status.HTTP_200_OK)
+
