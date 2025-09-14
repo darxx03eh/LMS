@@ -106,7 +106,7 @@ class MarkLessonCompleteAPITest(APITestCase):
         Helpers.signup()
         self.username = 'darxx03eh'
         self.password = '123456789mmm+-'
-        self.url = 'http://127.0.0.1:8000/api/v1/lessons/mark_completed'
+        self.url = 'http://127.0.0.1:8000/api/v1/lessons'
 
     def test_mark_lesson_complete(self):
         user = Helpers.login(self.username, self.password)
@@ -114,7 +114,7 @@ class MarkLessonCompleteAPITest(APITestCase):
         token = f'Bearer {user_data['data']['access']}'
         lesson, course_id = Helpers.create_lesson(token)
         lesson_id = lesson.json()['data']['id']
-        url = f'{self.url}/{lesson_id}'
+        url = f'{self.url}/{lesson_id}/mark_completed'
         response = self.client.post(
             url, HTTP_AUTHORIZATION=token,
             content_type='application/json', format='json',
