@@ -30,6 +30,22 @@ class Helpers:
         return
 
     @staticmethod
+    def create_student_account():
+        client = Client()
+        payload = {
+            'email': 'darawsheh003@gmail.com',
+            'username': 'darawsheh',
+            'password': '123456789mmm+-',
+            'first_name': 'Mahmoud',
+            'last_name': 'Darawsheh',
+            'phone_number': '+970568249300',
+            'role': 'student'
+        }
+
+        client.post(reverse('signup'), data=payload)
+        return
+
+    @staticmethod
     def create_course(token):
         client = Client()
         url = 'http://127.0.0.1:8000/api/v1/courses'
@@ -64,3 +80,17 @@ class Helpers:
             'document': open(os.path.join(settings.MEDIA_ROOT, 'lessons/docs/ARABOON.postman_collection.json'))
         }, format='multipart', HTTP_AUTHORIZATION=token)
         return (lesson, course_id)
+
+    @staticmethod
+    def create_feedback(instructor_token, student_token):
+        client = Client()
+        url = 'http://127.0.0.1:8000/api/v1/courses/feedback'
+        course = Helpers.create_course(instructor_token)
+        course_id = course.json()['data']['id']
+        feedback = client.post(url, data={
+            'rate': 5,
+            'comment': 'best course ever',
+            'course_id': course_id
+        }, HTTP_AUTHORIZATION=student_token, content_type='application/json')
+
+        return feedback, feedback.json()['data']['id'], course_id

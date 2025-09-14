@@ -34,7 +34,7 @@ class LessonsListAPITest(APITestCase):
         user = Helpers.login(self.username, self.password)
         user_data = user.json()
         token = f'Bearer {user_data['data']['access']}'
-        lesson = Helpers.create_lesson(token)
+        lesson, course_id = Helpers.create_lesson(token)
         response = self.client.get(
             self.url, HTTP_AUTHORIZATION=token,
             content_type='application/json', format='json',
@@ -53,7 +53,7 @@ class CreateLessonAPITest(APITestCase):
         user = Helpers.login(self.username, self.password)
         user_data = user.json()
         token = f'Bearer {user_data['data']['access']}'
-        response = Helpers.create_lesson(token)
+        response, course_id = Helpers.create_lesson(token)
         self.assertEqual(user.status_code, status.HTTP_200_OK)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 

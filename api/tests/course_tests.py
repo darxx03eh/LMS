@@ -118,7 +118,7 @@ class CourseProgressAPITest(APITestCase):
         token = f'Bearer {user_data['data']['access']}'
         course = Helpers.create_course(token)
         course_id = course.json()['data']['id']
-        url = f'{self.url}/progress/{course_id}'
+        url = f'{self.url}/{course_id}/progress'
 
         response = self.client.get(url, HTTP_AUTHORIZATION=token, content_type='application/json')
         self.assertEqual(user.status_code, status.HTTP_200_OK)

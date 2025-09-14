@@ -9,3 +9,7 @@ from .lesson_tests import (
     SpecificLessonAPITest, DeleteLessonAPITest, MarkLessonCompleteAPITest,
     UpdateLessonAPITest
 )
+from .feedback_tests import (
+    CreateFeedbackTests, FeedBackListTests, SpecificFeedbackTests,
+    UpdateFeedbackTests, DeleteFeedbackTests
+)
