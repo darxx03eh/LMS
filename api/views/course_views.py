@@ -16,7 +16,8 @@ from api.services.course_services import CourseServices
 from utails.custom_permissions import DenyAny, IsAdminUser, IsInstructorUser
 from utails.filters import CourseFilter
 
-
+import logging
+logger = logging.getLogger('api.controllers')
 @extend_schema(tags=["courses"])
 class CourseViewSet(ModelViewSet):
     queryset = Course.objects.prefetch_related(
@@ -61,7 +62,48 @@ class CourseViewSet(ModelViewSet):
         return super().get_queryset()
 
     def perform_create(self, serializer):
-        serializer.save(instructor=self.request.user)
+        user = self.request.user
+        if serializer.is_valid():
+            logger.info(
+                f'{serializer.validated_data} created successfully for user {user.username} has {user.role.lower()} role'
+            )
+            serializer.save(instructor=self.request.user)
+        else: logger.error(f'User: {user.username} field to add course with data {serializer.validated_data}')
+
+
+    def destroy(self, request, *args, **kwargs):
+        user = self.request.user
+        course = self.get_object()
+        try:
+            response = super().destroy(request, *args, **kwargs)
+            logger.info(f'User: {user.username} deleted his own {course.title} course successfully')
+            return response
+        except Exception as e:
+            logger.error(f'User: {user.username} failed to delete {course.title} course')
+            raise
+
+    def update(self, request, *args, **kwargs):
+        user = self.request.user
+        course = self.get_object()
+        try:
+            response = super().update(request, *args, **kwargs)
+            logger.info(
+                f'User: {user.username} updated his own {course.title} course successfully with data {request.data}'
+            )
+            return response
+        except Exception as e:
+            logger.error(f'User: {user.username} failed to update {course.title} course')
+            raise
+
+    def list(self, request, *args, **kwargs):
+        user = self.request.user
+        try:
+            response = super().list(request, *args, **kwargs)
+            logger.info(f'Courses retrieved for user {user.username} (id={user.id}) successfully')
+            return response
+        except Exception as e:
+            logger.error(f'User: {user.username} failed to list courses')
+            raise
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -72,6 +114,7 @@ class CourseViewSet(ModelViewSet):
                 "message": "Course retrieved successfully",
             }
         )
+        logger.info(f'Course: {instance.title} retrieved successfully for user {self.request.user}')
         return Response(data)
 
     @action(detail=True, methods=["get"], url_path="progress")
@@ -79,9 +122,11 @@ class CourseViewSet(ModelViewSet):
         course = self.get_object()
         user = self.request.user
         if not course.students.filter(id=user.id).exists():
+            logger.warning(f'User: {user.username} not enrolled in {course.title} course')
             raise PermissionDenied("You are not enrolled in this course.")
         course_services = CourseServices()
         prog = course_services.calculate_progress(pk, user)
+        logger.info(f'User: {user.username} request to get his progress in {course.title} course')
         return Response(prog)
 
     @action(detail=True, methods=["get"], url_path="feedback")
@@ -90,12 +135,14 @@ class CourseViewSet(ModelViewSet):
         feedbacks = course.course_feedbacks.all()
         serializer = FeedBackSerializer(feedbacks, many=True)
         if feedbacks.count() <= 0:
+            logger.warning(f'No feedback available for {course.title} course')
             return Response(
                 {
                     "message": "No feedbacks found",
                 },
                 status=status.HTTP_404_NOT_FOUND,
             )
+        logger.info(f'feedback available for {course.title} course')
         return Response(
             {
                 "result": serializer.data,
@@ -109,14 +156,21 @@ class CourseViewSet(ModelViewSet):
         user = self.request.user
 
         if user.role.lower() != 'student':
+            logger.warning(
+                f'User: {user.username} has {user.role.lower()} role, only students can enroll'
+            )
             raise PermissionDenied("Only students can enroll in courses.")
 
         if Enrollment.objects.filter(course=course, student=user).exists():
+            logger.warning(
+                f'User: {user.username} already enrolled in in {course.title} course'
+            )
             return Response({
                 "message": "You are already enrolled in this course."
             }, status=status.HTTP_400_BAD_REQUEST)
 
         enrollment = Enrollment.objects.create(course=course, student=user)
+        logger.info(f'User: {user.username} enrolled in {course.title} course')
         return Response({
             "message": "Enrolled successfully",
         }, status=status.HTTP_200_OK)

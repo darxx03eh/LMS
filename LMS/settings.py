@@ -211,3 +211,44 @@ cloudinary.config(
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file_general': {
+            'class': 'logging.FileHandler',
+            'filename': env("LOG_FILE"),
+            'level': env("LOG_LEVEL"),
+            'formatter': 'simple',
+        },
+        'file_controllers': {
+            'class': 'logging.FileHandler',
+            'filename': env("LOG_FILE_CONTROLLERS"),
+            'level': env("LOG_LEVEL"),
+            'formatter': 'simple',
+        },
+        'console': {
+            'class': 'logging.StreamHandler',
+            'level': env("LOG_LEVEL"),
+            'formatter': 'simple',
+        }
+    },
+    'loggers': {
+        '':{
+            'level': env("LOG_LEVEL"),
+            'handlers': ['file_general', 'console'],
+        },
+        'api.controllers': {
+            'level': env("LOG_LEVEL"),
+            'handlers': ['file_controllers', 'console'],
+            'propagate': False,
+        }
+    },
+    'formatters': {
+        'simple': {
+            'format': '{asctime}:{levelname} - {name} {module}.py (line {lineno:d}. {message})',
+            'style': '{',
+        }
+    }
+}
