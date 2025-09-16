@@ -283,7 +283,7 @@ Below is the Entity-Relationship Diagram (ERD) illustrating the structure of the
 ![ERD Diagram](ERD/LMS.png)
 
 
-## 👩‍💻 Author
+## 👨🏻‍💻 Author
 
 Built by ```Mahmoud Darawsheh - darxx03eh```  
 Backend training by ASAL Technologies
@@ -293,3 +293,4 @@ Backend training by ASAL Technologies
 ## 📜 License
 
 This project is licensed under the MIT License.
+
