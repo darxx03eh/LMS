@@ -82,8 +82,8 @@ The system also includes reviews, ratings, and search features to enhance the le
 
 	# JWT SETTINGS
 	JWT_SIGNING_KEY=JWT_SIGNING_KEY
-	JWT_AUDIENCE=lms-JWT_AUDIENCE
-	JWT_ISSUER=lms-JWT_ISSUER
+	JWT_AUDIENCE=JWT_AUDIENCE
+	JWT_ISSUER=JWT_ISSUER
 
 	# Cloudinary Settings
 	CLOUD_NAME=CLOUD_NAME
@@ -293,4 +293,5 @@ Backend training by ASAL Technologies
 ## 📜 License
 
 This project is licensed under the MIT License.
+
 
