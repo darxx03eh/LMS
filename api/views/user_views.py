@@ -1,4 +1,3 @@
-from Scripts.bottle import response
 from drf_spectacular.utils import extend_schema
 from rest_framework import generics, permissions
 
