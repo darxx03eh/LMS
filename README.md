@@ -199,8 +199,8 @@ to enable Swagger UI
 ```
 LMS/
 ├── api/									# Main API app
-│	├── migrations 
-│	├── models								# Database models (ORM)
+│	├── migrations/
+│	├── models/								# Database models (ORM)
 │	│	├── __init__.py
 │	│	├── completed_lesson.py
 │	│	├── course.py
@@ -209,17 +209,17 @@ LMS/
 │	│	├── lesson.py
 │	│	├── time_stamped_mix_in.py
 │	│	├── user.py
-│	├── serializers							# Handle JSON conversion & validation
+│	├── serializers/						# Handle JSON conversion & validation
 │	│	├──__init__.py
 │	│	├── auth_serializers.py
 │	│	├── course_serializers.py
 │	│	├── feedback_serializers.py
 │	│	├── lessons_serializers.py
 │	│	├── user_serializers.py
-│	├── services							# Business logic layer
+│	├── services/							# Business logic layer
 │	│	├── __init__.py
 │	│	├── course_servicees
-│	├── tests								# Test directory
+│	├── tests/								# Test directory
 │	│	├── helpers/		
 │	│	│	├── __init__.py
 │	│	│	├── helpers.py
@@ -229,7 +229,7 @@ LMS/
 │	│	├── feedback_tests.py
 │	│	├── lesson_tests.py
 │	│	├── user_tests.py
-│	├── views								# "Controllers" in Django terms
+│	├── views/								# "Controllers" in Django terms
 │	│	├── __init__.py
 │	│	├── auth_views.py					# Auth-related endpoints
 │	│	├── course_views.py					# Course-related endpoints
@@ -293,5 +293,6 @@ Backend training by ASAL Technologies
 ## 📜 License
 
 This project is licensed under the MIT License.
+
 
 
