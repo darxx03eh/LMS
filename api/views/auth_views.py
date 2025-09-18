@@ -10,6 +10,10 @@ from api.serializers.auth_serializers import (
     SignupSerializer,
 )
 import logging
+def sum():
+    pass
+
+# this is to test conflict
 logger = logging.getLogger('api.controllers')
 @extend_schema(tags=["auth"])
 class LoginAPIView(TokenObtainPairView):
@@ -24,6 +28,11 @@ class LoginAPIView(TokenObtainPairView):
         except Exception as e:
             logger.error(f'Failed login attempt for user={username_or_email}. Error: {str(e)}')
             raise
+
+def sum():
+    pass
+
+# this is to test conflict
 
 class SignupAPIView(APIView):
     serializer_class = SignupSerializer
