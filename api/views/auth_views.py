@@ -10,7 +10,7 @@ from api.serializers.auth_serializers import (
     SignupSerializer,
 )
 import logging
-def sum():
+def conflict():
     pass
 
 # this is to test conflict
@@ -29,7 +29,7 @@ class LoginAPIView(TokenObtainPairView):
             logger.error(f'Failed login attempt for user={username_or_email}. Error: {str(e)}')
             raise
 
-def sum():
+def conflict():
     pass
 
 # this is to test conflict
