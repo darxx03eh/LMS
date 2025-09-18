@@ -10,7 +10,6 @@ from api.serializers.auth_serializers import (
     SignupSerializer,
 )
 import logging
-
 def conflict():
     pass
 
