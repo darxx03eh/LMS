@@ -288,11 +288,3 @@ Below is the Entity-Relationship Diagram (ERD) illustrating the structure of the
 Built by ```Mahmoud Darawsheh - darxx03eh```  
 Backend training by ASAL Technologies
 
----
-
-## 📜 License
-
-This project is licensed under the MIT License.
-
-
-
