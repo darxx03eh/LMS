@@ -280,11 +280,12 @@ LMS/
 ## Database Schema
 Below is the Entity-Relationship Diagram (ERD) illustrating the structure of the database, including tables, relationships, and keys used in the application.
 
-![ERD Diagram](ERD/LMS.png)
+![ERD Diagram](ERD/LMS.jpg)
 
 
 ## 👨🏻‍💻 Author
 
 Built by ```Mahmoud Darawsheh - darxx03eh```  
 Backend training by ASAL Technologies
+
 
